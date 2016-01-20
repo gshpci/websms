@@ -2,8 +2,7 @@
 require 'header.php';
 require_once 'config.inc.php';
 ?>
-<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/
-libs/jquery/1.3.0/jquery.min.js"></script>
+<script  type="text/javascript" src="js/jquery.min.js"></script>
 
 <!--
 <script type="text/javascript">
@@ -55,6 +54,8 @@ $subject = '';
 $uid = '';
 $sms = '';
 
+$mobilenum = '';
+
 $col = 0;
 $cnt = 0;
 
@@ -101,9 +102,6 @@ foreach ($emails as $em) {
             $val = $d->format('m-d-Y H:i:s');
             $datetime = $val;
         } else if ($k == "subject") {
-
-
-
             $mob_no = substr($val,12,10);
             $query = mysql_query("select concat(Lastname,', ', Firstname) as name from phonebook where Number = concat('0', '$mob_no') || Number = concat('+63', '$mob_no')");
 
@@ -111,6 +109,7 @@ foreach ($emails as $em) {
                 $subject = $row['name']." <0".substr($val,12,10).">";
             } else {
                 $subject = "UNKNOWN <0".substr($val,12,10).">";
+                $mobilenum = "0".substr($val,12,10);
             }
         } else if ($k == "uid") {
             $uid = $val;
@@ -121,7 +120,16 @@ foreach ($emails as $em) {
 ?>
 
     <td class = "listtd" style="text-align: center"><?php echo $datetime ?></td>
-    <td class = "listtd"><?php echo $subject ?></td>
+    <td class = "listtd">
+        <div style="width: 100%; float:right;" >
+        <?php
+            echo $subject;
+            if (substr($subject, 0,7) == "UNKNOWN") {
+        ?>
+                <button style="text-decoration:none;cursor:pointer;" class = "btn btn-success" data-toggle="modal" data-target="#AddData1-<?php echo $uid; ?>"><span class="glyphicon glyphicon-pencil" aria-hidden="true" style = "color:#ffffff;"></span><font size="1em">Add to Phonebook</font></button >
+        <?php } ?>
+        </div>
+    </td>
     <td class = "listtd">
         <div style="width: 100%; float:right;" >
             <?php
@@ -154,6 +162,59 @@ foreach ($emails as $em) {
 <?php
     echo "</tr>";
 ?>
+
+<!--Modal for Add Contact-->
+        <div class="modal fade" id="AddData1-<?php echo $uid; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabe">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabe">Add New Contact</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <br>
+                            <br>
+                            <br>
+                            <center>
+                                <form action="add.php" method="post">
+                                <input type="hidden" id="Modal" name="Modal" value="myAddRecord">
+                                <input type="hidden" id="action" name="action" value="Add Contact">
+                                <input type="hidden" id="station" name="station" value="<?php echo $from_name; ?>">
+                                    <div class="form-group has-info">
+                                        <label class="control-label" for="From_Name">Lastname *</label>
+                                            <input type="text" class="form-control" name="lName" style="width:50%;height:2em" required>
+                                    </div>
+                                    <div class="form-group has-info">
+                                        <label class="control-label" for="From_Name">Firstname *</label>
+                                            <input type="text" class="form-control" name="fName" style="width:50%;height:2em" required>
+                                    </div>
+                                    <div class="form-group has-info">
+                                        <label class="control-label" for="From_Name">Middlename</label>
+                                            <input type="text" class="form-control" name="mName" style="width:50%;height:2em">
+                                    </div>
+
+                                    <div class="form-group has-info">
+                                        <label class="control-label" for="From_Name">Number (11-Digit Format: 09XXXXXXXXX) *</label>
+                                        <br>
+                                        <h4 class="control-label" for="From_Name" style="border-style: solid; border-radius: 6px; border-width: 1px; padding: 5px 0px 5px 0px; border-color: #CCCCCC; width: 50%;"><?php echo $mobilenum; ?></h4>
+                                            <input pattern="^09[0-9]{9}" value ="<?php echo $mobilenum; ?>" title="11 digits and numbers only. Must start with 09"  maxlength="11" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="hidden" class="form-control" name="Number" style="width:50%;height:2em" >
+                                    </div>
+                                    * - Required field.
+                            </center>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--End Modal for Add Contact-->
 
 <!-- View Modal -->
 <div class="modal fade" id="ViewSMS-<?php echo $uid; ?>" tabindex="-<?php echo $uid; ?>" role="dialog" aria-labelledby="myModalLabel-<?php echo $uid; ?>" aria-hidden="true">

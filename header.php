@@ -4,7 +4,7 @@
  * revised, updated and corrected 27/02/2013
  * by matt.sturdy@gmail.com
  */
-require 'PHPMailerAutoload.php';
+require_once 'PHPMailerAutoload.php';
 require_once 'config.inc.php';
 
 $sel_id = '';
