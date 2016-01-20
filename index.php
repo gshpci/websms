@@ -1,8 +1,14 @@
 <?php
+
+if(isset($_POST['login']))
+{
+    $_SESSION['station'] = $_POST['station'];
+}
+
 require_once 'includes/header.php';
 
     $user = new User();
-//register($Name, $Station, $Username, $Password)
+
     // If the form is submitted to register user
     if(isset($_POST['register'])) {
         global $user;
@@ -39,7 +45,7 @@ require_once 'includes/header.php';
                             <label>Station</label>
                             <input type="name" class="form-control" name="name" placeholder="Name">
                         </div>
-                        <div class="form-group"> 
+                        <div class="form-group">
                             <label>Station</label>
                             <select size="1" class="form-control" name="station" id="station">
                                 <option value ="NS1">NS1</option>
@@ -65,7 +71,7 @@ require_once 'includes/header.php';
             </div>
             <!-- end -->
         </div>
-        
+
         <div class="col-md-4">
             <!-- Login with existing user credentials -->
             <div class="panel panel-primary">
@@ -75,7 +81,7 @@ require_once 'includes/header.php';
                 <div class="panel-body">
                     <!-- form -->
                     <form action="" method="post">
-                      
+
                             <label>Station</label>
                             <select size="1" class="form-control" name ="station" value="<?php $station?>" id="station">
                                 <option value ="NS1">NS1</option>
@@ -86,9 +92,9 @@ require_once 'includes/header.php';
                             <br>
                             <label>Password</label>
                             <input type="password" class="form-control" name="password" placeholder="Password">
-				<br>  
+				<br>
 				<!--
-                        	<input type="submit" value="Login"  class="btn btn-primary" >   
+                        	<input type="submit" value="Login"  class="btn btn-primary" >
                         	-->
 				<button type="submit" class="btn btn-default pull-right" name="login">Login</button>
                         	<!--

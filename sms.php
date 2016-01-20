@@ -29,27 +29,8 @@ require 'header.php';
 
 <div class="container-fluid" id="cc">
 <?php
-    if (version_compare(PHP_VERSION, '5.0.0', '<')) {
-        //echo 'Current PHP version: ' . phpversion() . "<br>";
-        //echo exit("ERROR: Wrong PHP version. Must be PHP 5 or above.");
-    }
-
-    if (count($results_messages) > 0) {
-        //echo '<h2>Run results</h2>';
-        //echo '<ul>';
-            foreach ($results_messages as $result) {
-                //echo "<li>$result</li>";
-                    }
-                    //echo '</ul>';
-                }
-
     if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
         echo "<button type=\"submit\" onclick=\"startAgain();\">Start Over</button><br>\n";
-        //echo "<br><span>Script:</span>\n";
-        //echo "<pre class=\"brush: php;\">\n";
-        //echo $example_code;
-        //echo "\n</pre>\n";
-        //echo "\n<hr style=\"margin: 3em;\">\n";
     }
 ?>
 
@@ -215,14 +196,6 @@ $query = mysql_query("select id, concat(Lastname,', ',Firstname) as name, Number
                             <td>
                                 <input type="text" name="smtp_secure" id="smtp_secure" size="3"
                                        value="<?php echo $smtp_secure; ?>" placeholder="SSL">
-                            <?php
-                            /*
-                                <select size="1" name="smtp_secure" id="smtp_secure">
-                                    <option <?php echo ($smtp_secure == 'none') ? 'selected' : '' ?>>None</option>
-                                    <option <?php echo ($smtp_secure == 'tls') ? 'selected' : '' ?>>TLS</option>
-                                   <option <?php echo ($smtp_secure == 'ssl') ? 'selected' : '' ?>>SSL</option>
-                                </select>
-                            */ ?>
                             </td>
                         </tr>
                         <tr>
@@ -404,15 +377,10 @@ $query = mysql_query("select id, concat(Lastname,', ',Firstname) as name, Number
 
 <?php
                     }
-
-                    //close the connection
-                    //mysql_close($dbhandle);
 ?>
 
         </tbody>
            </table></div>
-
-
 
     <script type="text/javascript">
     window.onload= function(){

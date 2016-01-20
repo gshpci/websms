@@ -157,6 +157,7 @@ try {
             substr($_POST['Subject'], 0, 4) == "0939" ||
             substr($_POST['Subject'], 0, 4) == "0940" ||
             substr($_POST['Subject'], 0, 4) == "0946" ||
+            substr($_POST['Subject'], 0, 4) == "0947" ||
             substr($_POST['Subject'], 0, 4) == "0948" ||
             substr($_POST['Subject'], 0, 4) == "0949" ||
             substr($_POST['Subject'], 0, 4) == "0971" ||

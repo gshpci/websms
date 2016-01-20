@@ -225,7 +225,7 @@ if( substr($Number, 0, 4) == "0817" ||
     substr($Number, 0, 4) == "+63934" ||
     substr($Number, 0, 4) == "+63942" ||
     substr($Number, 0, 4) == "+63943" ||
-    substr($Number, 0, 4) == "+63944" ||){
+    substr($Number, 0, 4) == "+63944"){
 
     $query = mysql_query("select * from phonebook where Number = '$Number'");
 

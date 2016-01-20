@@ -1,11 +1,22 @@
 <?php
-/*
- * A web form that both generates and uses PHPMailer code.
- * revised, updated and corrected 27/02/2013
- * by matt.sturdy@gmail.com
- */
-require_once 'PHPMailerAutoload.php';
 require_once 'config.inc.php';
+
+if (!isset($_SESSION['station'])) {
+    header("location: index.php");
+    exit;
+}
+
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 28800)) {
+    // last request was more than 8 hours ago
+    session_unset();     // unset $_SESSION variable for the run-time
+    session_destroy();   // destroy session data in storage
+    header("location: index.php");
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+
+$from_name = $_SESSION['station'];
+
+require_once 'PHPMailerAutoload.php';
 
 $sel_id = '';
 $sel_Name = '';
@@ -18,41 +29,9 @@ $dbase = CONF_DB_NAME;
 //connection to the database
 $conn = mysql_connect($h, $u, $p)
  or die("Unable to connect to MySQL");
-//echo "Connected to MySQL<br>";
 
-mysql_select_db($dbase);
-//select a database to work with
 $selected = mysql_select_db($dbase, $conn)
-  or die("Could not select examples");
-
-$sql = "select *, timestampdiff(second, datetime,  concat(curdate(),' ', curtime())) from logstrigger order by datetime desc limit 1";
-
-//execute the SQL query and return records
-$result = mysql_query("$sql");
-
-//fetch tha data from the database
-if ($row = mysql_fetch_array($result)) {
-    if ($row['action'] == "Logout") {
-        echo "<script>window.location.href='index.php';</script>";
-    } else {
-
-        $sql = "SELECT station from logstrigger order by `datetime` desc limit 1";
-        $result = mysql_query("$sql");
-
-        //fetch tha data from the database
-        if ($row = mysql_fetch_array($result)) {
-            $from_name = (isset($_POST['From_Name'])) ? $_POST['From_Name'] : $row{'station'};
-        }
-    }
-
-} else {
-    $sql = "SELECT station from logstrigger order by `datetime` desc limit 1";
-    $result = mysql_query("$sql");
-
-    if ($row = mysql_fetch_array($result)) {
-        $from_name = (isset($_POST['From_Name'])) ? $_POST['From_Name'] : $row{'station'};
-    }
-}
+  or die("Could not select database");
 
 $CFG['From_Email'] = CONFG_FROMEMAIL;
 $CFG['To_Name'] = CONFG_TONAME;
@@ -228,6 +207,7 @@ try {
             substr($_POST['Subject'], 0, 4) == "0939" ||
             substr($_POST['Subject'], 0, 4) == "0940" ||
             substr($_POST['Subject'], 0, 4) == "0946" ||
+            substr($_POST['Subject'], 0, 4) == "0947" ||
             substr($_POST['Subject'], 0, 4) == "0948" ||
             substr($_POST['Subject'], 0, 4) == "0949" ||
             substr($_POST['Subject'], 0, 4) == "0971" ||
@@ -324,23 +304,10 @@ try {
             $subject = '';
             $message = '';
 
-            $u = CONF_DB_USER;
-            $p = CONF_DB_PASS;
-            $h = CONF_WEBHOST;
-
-            //connection to the database
-            $conn = mysql_connect($h, $u, $p) or die("Unable to connect to MySQL");
-            //echo "Connected to MySQL<br>";
-
-            mysql_select_db($dbase);
-            //select a database to work with
-            $selected = mysql_select_db($dbase, $conn) or die("Could not select examples");
-
             $sql = "INSERT INTO sms (datetime, mobile_no, station, message, remarks) VALUES(concat(curdate(),' ',curtime()),'". $_POST['Subject'] ."','". $_POST['From_Name'] ."',\"". $_POST['Message'] ."\",'". $smsremarks ."')";
             //echo $sql;
 
             $retval = mysql_query( $sql, $conn );
-
             if(! $retval ) {
                die('Could not enter data: ' . mysql_error());
             }
@@ -373,25 +340,13 @@ try {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>SMS</title>
-<!--
-    <script type="text/javascript" src="scripts/shCore.js"></script>
-    <script type="text/javascript" src="scripts/shBrushPhp.js"></script>
-    <link type="text/css" rel="stylesheet" href="styles/shCore.css">
-    <link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css">
--->
-    <!-- Latest compiled and minified CSS
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    -->
-    <script src="js/jquery.min.js"></script>
 
+    <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/sms.css" type="text/css" rel="stylesheet">
 
     <script>
-        //SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
-        //SyntaxHighlighter.all();
-
         function startAgain() {
             var post_params = {
                 "From_Name": "<?php echo $from_name; ?>",
@@ -458,6 +413,7 @@ try {
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <input type="hidden" id="From_Name" name="From_Name" value="<?php echo $from_name ?>">
 
         <?php
         $menu_links = array('sms' => 'Compose', 'inbox' => 'Inbox', 'sent' => 'Sent');

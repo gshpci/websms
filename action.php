@@ -15,7 +15,11 @@ $dst = $_POST['action'];
 $action_stat = $src." -> ".$dst;
 $station = ($_POST['station']);
 
-if ($dst == 'Logout') $dst = 'index.php';
+if ($dst == 'Logout') {
+    session_unset();
+    session_destroy();
+    $dst = 'index.php';
+}
 
 $sql = "INSERT INTO logstrigger(Station, `action`, datetime) VALUES ('{$station}', '{$action_stat}', concat(curdate(),' ',curtime()))";
 
