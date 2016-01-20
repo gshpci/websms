@@ -96,7 +96,7 @@ try {
         }
 
 
-        if( substr($_POST['Subject'], 0, 4) == "0977" ||
+        if( substr($_POST['Subject'], 0, 4) == "0817" ||
             substr($_POST['Subject'], 0, 4) == "0905" ||
             substr($_POST['Subject'], 0, 4) == "0906" ||
             substr($_POST['Subject'], 0, 4) == "0915" ||
@@ -108,12 +108,16 @@ try {
             substr($_POST['Subject'], 0, 4) == "0935" ||
             substr($_POST['Subject'], 0, 4) == "0936" ||
             substr($_POST['Subject'], 0, 4) == "0937" ||
+            substr($_POST['Subject'], 0, 4) == "0975" ||
+            substr($_POST['Subject'], 0, 4) == "0977" ||
+            substr($_POST['Subject'], 0, 4) == "0994" ||
             substr($_POST['Subject'], 0, 4) == "0996" ||
             substr($_POST['Subject'], 0, 4) == "0997" ){
 
             $mail->Subject = '500:eimr-port:11-'.$_POST['Subject'] ;
 
-        }else if(substr($_POST['Subject'], 0, 6) == "+63905" ||
+        }else if(substr($_POST['Subject'], 0, 6) == "+63817" ||
+            substr($_POST['Subject'], 0, 6) == "+63905" ||
             substr($_POST['Subject'], 0, 6) == "+63906" ||
             substr($_POST['Subject'], 0, 6) == "+63915" ||
             substr($_POST['Subject'], 0, 6) == "+63916" ||
@@ -124,15 +128,22 @@ try {
             substr($_POST['Subject'], 0, 6) == "+63935" ||
             substr($_POST['Subject'], 0, 6) == "+63936" ||
             substr($_POST['Subject'], 0, 6) == "+63937" ||
+            substr($_POST['Subject'], 0, 6) == "+63975" ||
+            substr($_POST['Subject'], 0, 6) == "+63977" ||
+            substr($_POST['Subject'], 0, 6) == "+63994" ||
             substr($_POST['Subject'], 0, 6) == "+63996" ||
             substr($_POST['Subject'], 0, 6) == "+63997" ){
 
             $mail->Subject = '500:eimr-port:11-09'.substr($_POST['Subject'], 4, 12);
 
-        }else if(substr($_POST['Subject'], 0, 4) == "0907" ||
+        }else if(/* SMART */
+            substr($_POST['Subject'], 0, 4) == "0813" ||
+            substr($_POST['Subject'], 0, 4) == "0900" ||
+            substr($_POST['Subject'], 0, 4) == "0907" ||
             substr($_POST['Subject'], 0, 4) == "0908" ||
             substr($_POST['Subject'], 0, 4) == "0909" ||
             substr($_POST['Subject'], 0, 4) == "0910" ||
+            substr($_POST['Subject'], 0, 4) == "0911" ||
             substr($_POST['Subject'], 0, 4) == "0912" ||
             substr($_POST['Subject'], 0, 4) == "0918" ||
             substr($_POST['Subject'], 0, 4) == "0919" ||
@@ -141,28 +152,39 @@ try {
             substr($_POST['Subject'], 0, 4) == "0928" ||
             substr($_POST['Subject'], 0, 4) == "0929" ||
             substr($_POST['Subject'], 0, 4) == "0930" ||
+            substr($_POST['Subject'], 0, 4) == "0931" ||
             substr($_POST['Subject'], 0, 4) == "0938" ||
             substr($_POST['Subject'], 0, 4) == "0939" ||
-            substr($_POST['Subject'], 0, 4) == "0942" ||
-            substr($_POST['Subject'], 0, 4) == "0943" ||
+            substr($_POST['Subject'], 0, 4) == "0940" ||
             substr($_POST['Subject'], 0, 4) == "0946" ||
             substr($_POST['Subject'], 0, 4) == "0948" ||
-            substr($_POST['Subject'], 0, 4) == "0989" ||
-            substr($_POST['Subject'], 0, 4) == "0939" ||
-            substr($_POST['Subject'], 0, 4) == "0922" ||
-            substr($_POST['Subject'], 0, 4) == "0923" ||
-            substr($_POST['Subject'], 0, 4) == "0932" ||
+            substr($_POST['Subject'], 0, 4) == "0949" ||
+            substr($_POST['Subject'], 0, 4) == "0971" ||
+            substr($_POST['Subject'], 0, 4) == "0980" ||
             substr($_POST['Subject'], 0, 4) == "0989" ||
             substr($_POST['Subject'], 0, 4) == "0998" ||
             substr($_POST['Subject'], 0, 4) == "0999" ||
-            substr($_POST['Subject'], 0, 4) == "0933"){
+            /* SUN */
+            substr($_POST['Subject'], 0, 4) == "0922" ||
+            substr($_POST['Subject'], 0, 4) == "0923" ||
+            substr($_POST['Subject'], 0, 4) == "0925" ||
+            substr($_POST['Subject'], 0, 4) == "0932" ||
+            substr($_POST['Subject'], 0, 4) == "0933" ||
+            substr($_POST['Subject'], 0, 4) == "0934" ||
+            substr($_POST['Subject'], 0, 4) == "0942" ||
+            substr($_POST['Subject'], 0, 4) == "0943" ||
+            substr($_POST['Subject'], 0, 4) == "0944" ){
 
             $mail->Subject = '500:eimr-port:13-'.$_POST['Subject'] ;
 
-        }else if(substr($_POST['Subject'], 0, 6) == "+63907" ||
+        }else if(/* SMART */
+            substr($_POST['Subject'], 0, 6) == "+63813" ||
+            substr($_POST['Subject'], 0, 6) == "+63900" ||
+            substr($_POST['Subject'], 0, 6) == "+63907" ||
             substr($_POST['Subject'], 0, 6) == "+63908" ||
             substr($_POST['Subject'], 0, 6) == "+63909" ||
             substr($_POST['Subject'], 0, 6) == "+63910" ||
+            substr($_POST['Subject'], 0, 6) == "+63911" ||
             substr($_POST['Subject'], 0, 6) == "+63912" ||
             substr($_POST['Subject'], 0, 6) == "+63918" ||
             substr($_POST['Subject'], 0, 6) == "+63919" ||
@@ -171,18 +193,28 @@ try {
             substr($_POST['Subject'], 0, 6) == "+63928" ||
             substr($_POST['Subject'], 0, 6) == "+63929" ||
             substr($_POST['Subject'], 0, 6) == "+63930" ||
+            substr($_POST['Subject'], 0, 6) == "+63931" ||
             substr($_POST['Subject'], 0, 6) == "+63938" ||
             substr($_POST['Subject'], 0, 6) == "+63939" ||
-            substr($_POST['Subject'], 0, 6) == "+63942" ||
-            substr($_POST['Subject'], 0, 6) == "+63943" ||
+            substr($_POST['Subject'], 0, 6) == "+63940" ||
             substr($_POST['Subject'], 0, 6) == "+63946" ||
             substr($_POST['Subject'], 0, 6) == "+63948" ||
+            substr($_POST['Subject'], 0, 6) == "+63949" ||
+            substr($_POST['Subject'], 0, 6) == "+63971" ||
+            substr($_POST['Subject'], 0, 6) == "+63980" ||
             substr($_POST['Subject'], 0, 6) == "+63989" ||
-            substr($_POST['Subject'], 0, 6) == "+63939" ||
+            substr($_POST['Subject'], 0, 6) == "+63998" ||
+            substr($_POST['Subject'], 0, 6) == "+63999" ||
+            /* SUN */
             substr($_POST['Subject'], 0, 6) == "+63922" ||
             substr($_POST['Subject'], 0, 6) == "+63923" ||
+            substr($_POST['Subject'], 0, 6) == "+63925" ||
             substr($_POST['Subject'], 0, 6) == "+63932" ||
-            substr($_POST['Subject'], 0, 6) == "+63933" ){
+            substr($_POST['Subject'], 0, 6) == "+63933" ||
+            substr($_POST['Subject'], 0, 6) == "+63934" ||
+            substr($_POST['Subject'], 0, 6) == "+63942" ||
+            substr($_POST['Subject'], 0, 6) == "+63943" ||
+            substr($_POST['Subject'], 0, 6) == "+63944" ){
 
             $mail->Subject = '500:eimr-port:13-09'.substr($_POST['Subject'], 4, 12);
 

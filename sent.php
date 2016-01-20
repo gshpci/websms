@@ -2,81 +2,75 @@
 require 'header.php';
  ?>
 
+<style>
+  .dropdown {
+    position: relative;
+    width: 350px;
+  }
+  .dropdown select{
+    width: 100%;
+  }
+  .dropdown > * {
+    box-sizing: border-box;
+    height: 1.5em;
+  }
+  .dropdown option{
+  color: green;
+  }
+  .dropdown input {
+  /*width: calc(100% - 20px);*/
+  padding: 0 2.5em 0 2.5em;
+  width: 100%;
+  color: black;
+  }
+</style>
 
-<div class="container-fluid" id="cc">
+  <div class="container-fluid" id="cc">
     <fieldset>
         <h5 style="color:white;"><blockquote>
             <span class="glyphicon glyphicon-envelope">&nbsp;<strong>Sent Items</strong>
         </blockquote>
     </fieldset>
 
-            <?php
-                if (version_compare(PHP_VERSION, '5.0.0', '<')) {
-                    //echo 'Current PHP version: ' . phpversion() . "<br>";
-                    //echo exit("ERROR: Wrong PHP version. Must be PHP 5 or above.");
-                }
+<?php
 
-                if (count($results_messages) > 0) {
-                    //echo '<h2>Run results</h2>';
-                    //echo '<ul>';
-                        foreach ($results_messages as $result) {
-                            //echo "<li>$result</li>";
-                                }
-                                //echo '</ul>';
-                            }
+$u = CONF_DB_USER;
+$p = CONF_DB_PASS;
+$h = CONF_WEBHOST;
+$dbase = CONF_DB_NAME;
 
-                if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
-                    echo "<button type=\"submit\" onclick=\"startAgain();\">Start Over</button><br>\n";
-                    //echo "<br><span>Script:</span>\n";
-                    //echo "<pre class=\"brush: php;\">\n";
-                    //echo $example_code;
-                    //echo "\n</pre>\n";
-                    //echo "\n<hr style=\"margin: 3em;\">\n";
-                }
-            ?>
+$dbhandle = mysql_connect($h, $u, $p) or die("Unable to connect to MySQL");
+$selected = mysql_select_db($dbase,$dbhandle) or die("Could not select examples");
 
+if ($from_name == 'Admin') {
+    $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s order by datetime desc  limit 50";
+} else {
+    //$sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s where station = '{$from_name}' order by datetime desc limit 15" ;
+    $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s where station = '{$from_name}' order by datetime desc limit 50" ;
+}
 
-            <?php
-                    $u = CONF_DB_USER;
-                    $p = CONF_DB_PASS;
-                    $h = CONF_WEBHOST;
-                    $dbase = CONF_DB_NAME;
+$result = mysql_query($sql);
+?>
+  <table class="rwd-table" style="width: 100%;">
+    <thead>
+      <tr class="listtr">
+        <th class="listtd" style="text-align: center" width="5%">Station</th>
+        <th class="listtd" style="text-align: center" width="12%">Datetime</th>
+        <th class="listtd" style="text-align: center" width="24%">Recipient</th>
+        <th class="listtd" style="text-align: center" width="36%">Message</th>
+        <th class="listtd" style="text-align: center" width="25%">Status</th>
+      </tr>
+    </thead>
+  </table>
 
-                    //connection to the database
-                    $dbhandle = mysql_connect($h, $u, $p)
-                     or die("Unable to connect to MySQL");
-                    //echo "Connected to MySQL<br>";
+  <div id='myDIV' style='height: 520px;'>
+    <table class='rwd-table' style='width: 100%;'>
 
-                    //select a database to work with
-                    $selected = mysql_select_db($dbase,$dbhandle)
-                      or die("Could not select examples");
-
-                    //execute the SQL query and return records
-
-      if($from_name == 'Admin'){
-        $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s order by datetime desc  limit 15";
-      }else{
-        //$sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s where station = '{$from_name}' order by datetime desc limit 15" ;
-        $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s order by datetime desc limit 50" ;
-      }
-
-        $result = mysql_query($sql);
-
-        echo "<table class='rwd-table'>
-              <thead>";
-                echo "<tr class = 'listtr'>
-                         <th class = 'listtd' style='text-align: left'>Station</th>
-                         <th class = 'listtd' style='text-align: left'>Datetime</th>
-                         <th class = 'listtd' style='text-align: left'>Mobile</th>
-                         <th class = 'listtd' style='text-align: left'>Message</th>
-                         <th class = 'listtd' style='text-align: left'>Remarks</td>
-                      </tr>
-              </thead>";
-
-        while ($row = mysql_fetch_array($result)) {
-          echo "<tbody data-bind='foreach: Items' >
+<?php
+    while ($row = mysql_fetch_array($result)) {
+      echo "<tbody data-bind='foreach: Items' >
                 <tr class = 'listtr'>
-                  <td class = 'listtd1'>".$row{'station'}."</td>
+                  <td class = 'listtd1' style='width: 5%;'>".$row{'station'}."</td>
                   <td class = 'listtd1' style='width: 12%;'>".$row{'datetime'}."</td>";
 
                   $mobile = $row{'mobile_no'};
@@ -88,93 +82,138 @@ require 'header.php';
                     $to = "UNKNOWN <".$mobile.">";
                   }
 
-          echo " <td class = 'listtd1' style='width: 25%;'>".$to."</td>
-                 <td class = 'listtd1' style='width: 36%;'>";
+            echo "<td class = 'listtd1' style='width: 25%;'>".$to."</td>
+                  <td class = 'listtd1' style='width: 36%;'>";
         ?>
-                    <div style="width: 100%; float:right;" >
-        <?php
-                    $sms = $row{'message'};
-                    if (strlen($sms) > 50) {
-                      echo substr($sms, 0, 50)."<span style='font-size:14 px; color:red;'> ... (trunc). </span>";
-        ?>
-                      <button style="text-decoration:none;cursor:pointer;" class = "btn btn-info" data-toggle="modal" data-target="#ViewSMS-<?php echo $row['id']; ?>">
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style = "color:#fff;"></span>
-                        View
-                      </button >
+                      <div style="width: 100%; float:right;" >
+                <?php
+                      $sms = $row{'message'};
+                      if (strlen($sms) > 50) {
+                        echo substr($sms, 0, 50)."<span style='font-size:14 px; color:red;'> ... (trunc). </span>";
+                ?>
+                        <button style="text-decoration:none;cursor:pointer;" class = "btn btn-info" data-toggle="modal" data-target="#ViewSMS-<?php echo $row['id']; ?>">
+                          <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style = "color:#fff;"></span>
+                          View
+                        </button >
 
-              <?php } else {
-                      echo substr($sms, 0, 50);
-                    }
-              ?>
-                    </div>
+                <?php } else {
+                        echo substr($sms, 0, 50);
+                      }
+                ?>
+                      </div>
                   </td>
-<?php
-            echo "<td class = 'listtd1'>".$row{'remarks'}."</td>";
-?>
-                </tr>
+                  <td class = "listtd1"><?php echo $row{'remarks'} ?> &nbsp;&nbsp;
+                    <button style="text-decoration:none;cursor:pointer;" class = "btn btn-info" data-toggle="modal" data-target="#ForwardSMS-<?php echo $row['id']; ?>">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style = "color:#fff;"></span>
+                        Forward
+                    </button >
+                  </td>
+              </tr>
 
-<!-- View Modal -->
-<div class="modal fade" id="ViewSMS-<?php echo $row['id']; ?>" tabindex="-<?php echo $row['id']; ?>" role="dialog" aria-labelledby="myModalLabel-<?php echo $row['id']; ?>" aria-hidden="true">
-      <div class="modal-dialog">
-  <div class="modal-content">
+        <!-- View Modal -->
+        <div class="modal fade" id="ViewSMS-<?php echo $row['id']; ?>" tabindex="-<?php echo $row['id']; ?>" role="dialog" aria-labelledby="myModalLabel-<?php echo $row['id']; ?>" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <span id="IL_AD4" class="IL_AD">
+                    <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true"></span>
+                    </a>
+                  </span>
+                  <h4 class="modal-title" id="myModalLabel-<?php echo $row['id']; ?>">SMS Details</h4>
+                </div>
 
-        <div class="modal-header">
-            <span id="IL_AD4" class="IL_AD">
-        <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">
+                <div class="modal-body" >
+                  <form action="delete.php" method="post">
+                    <input type="hidden" id="id" name="id" value="<?php echo $row['id']; ?>">
+                    <h4 class="modal-title" id="lblmessage">Message &nbsp;</h4>
+                    <textarea type="text" class="form-control" id="message" name="message" value="<?php echo $row['message']; ?>" style="height:33em" disabled><?php echo $row['message']; ?></textarea>
+                  </form>
+                </div>
 
-          </span>
-        </a>
-        </span>
-
-            <h4 class="modal-title" id="myModalLabel-<?php echo $row['id']; ?>">SMS Details</h4>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+          </div>
         </div>
+        <!-- End View Modal -->
 
-      <div class="modal-body" >
-      <form action="delete.php" method="post">
-            <input type="hidden" id="id" name="id" value="<?php echo $row['id']; ?>">
-              <!--
-        <h4 class="modal-title" id="lblstation">Station: &nbsp;</h4>
-          <input type="text" class="form-control" id="station" name="station" placeholder="<?php echo $row['station']; ?>" disabled>
-          <h4 class="modal-title" id="lbldatetime">Datetime: &nbsp;</h4>
-          <input type="text" class="form-control" id="datetime" name="datetime" placeholder="<?php echo $row['datetime']; ?>" disabled>
-        <h4 class="modal-title" id="lblmobileno">Receiver: &nbsp;</h4>
-          <input type="text" class="form-control" id="mobileno" name="mobileno" placeholder="<?php echo $row['mobile_no']; ?>" disabled>
-        -->
-        <h4 class="modal-title" id="lblmessage">Message &nbsp;</h4>
-          <textarea type="text" class="form-control" id="message" name="message" value="<?php echo $row['message']; ?>" style="height:33em" disabled><?php echo $row['message']; ?></textarea>
-        <!--
-        <h4 class="modal-title" id="lblremarks">Remarks:
-            <span style="font-size:20px;"><?php echo $row['remarks']; ?></span>
-        </h4>
-        -->
+        <!-- Forward Modal -->
+        <div class="modal fade" id="ForwardSMS-<?php echo $row['id']; ?>" tabindex="-<?php echo $row['id']; ?>" role="dialog" aria-labelledby="myModalLabel-<?php echo $row['id']; ?>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
-    </div>
+                    <div class="modal-header">
+                      <span id="IL_AD4" class="IL_AD">
+                        <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </a>
+                      </span>
+                      <h4 class="modal-title" id="myModalLabel-<?php echo $row['id']; ?>">
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
+                        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style = "color:#fff;"></span>
+                        Forward SMS
+                      </h4>
+                    </div>
 
+                    <div class="modal-body" >
+                      <form action = "sendfunction.php" method="POST" >
 
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <!--
-        <input type="submit" value="Yes, Delete!" class="btn btn-danger">
-        -->
-      </div>
-      </div>
-      </form>
-   </div>
+                            <input type="hidden" class="form-control" name="From_Name" id="From_Name" value="<?php echo $from_name; ?>" style="width:120%;height:2em">
+                            <input type="hidden" class="form-control" id="From_Email" name="From_Email" value="<?php echo $from_email; ?>" style="width:120%;height:2em">
+                            <input type="hidden" class="form-control" id="To_Name" name="To_Name" value="<?php echo $to_name; ?>" style="width:120%;height:2em">
+                            <input type="hidden" class="form-control" id="To_Email" name="To_Email" value="<?php echo $to_email; ?>" style="width:120%;height:2em">
+                            <input type="hidden" class="form-control" id="cc_Email" name="cc_Email" value="<?php echo $cc_email; ?>" style="width:120%;height:2em">
+                            <input type="hidden" class="form-control" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>" style="width:120%;height:2em">
+
+                            <label class="control-label" for="Message">Mobile :</label>
+                            <div class="dropdown">
+                              <input pattern="^09[0-9]{9}" title="11 digits and numbers only. Must start with 09" style="font-size: 14px;" maxlength="11" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="text" id="Subject" name="Subject" placeholder='ENTER 09xxxxxxxxx or SELECT below' required />
+                              <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()" size="1" class="form-control">
+                                  <option value='09xxxxxxxxx'>SELECT HERE</option>
+
+                                      <?php
+                                      $u = CONF_DB_USER;
+                                      $p = CONF_DB_PASS;
+                                      $h = CONF_WEBHOST;
+                                      $dbase = CONF_DB_NAME;
+                                      $connect_db = mysql_connect($h, $u, $p) or die("Cannot connect to server");
+                                      mysql_select_db($dbase,$connect_db) or die("Cannot connect to the database");
+
+                                      $query = mysql_query("select id, concat(Lastname,', ',Firstname) as name, Number from phonebook order by name asc");
+
+                                                          while ($row = mysql_fetch_array($query)) {
+                                                      echo "<option value =".$row['Number'].">".$row['name']." &nbsp; < ".$row['Number']." ></option>";
+                                                  }
+                                      ?>
+                              </select>
+                            </div>
+
+                            <br><br>
+                            <label class="control-label" for="Message">Message :</label>
+                            <textarea type="text" class="form-control" id="Message" name="Message" value="<?php echo $message; ?>" style="height:30em" required><?php echo $sms; ?></textarea>
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                              <input type="submit" value="Send" name="submit" class="colrite btn btn-success pull-right">
+                            </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Forward Modal -->
+
+<?php
+    }
+
+    mysql_close($dbhandle);
+?>
+      </tbody>
+    </table>
   </div>
 </div>
-<!-- End View Modal -->
-
-
-<?php
-                    }
-
-
-                    //close the connection
-                    mysql_close($dbhandle);
-                    ?>
-           </tbody>
-           </table>
-    </div>
 </body>
 </html>

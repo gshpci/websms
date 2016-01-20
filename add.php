@@ -113,7 +113,7 @@ if(substr($Number, 0, 4) == "+639"){
     }
 }
 
-if( substr($Number, 0, 4) == "0977" ||
+if( substr($Number, 0, 4) == "0817" ||
     substr($Number, 0, 4) == "0905" ||
     substr($Number, 0, 4) == "0906" ||
     substr($Number, 0, 4) == "0915" ||
@@ -125,8 +125,12 @@ if( substr($Number, 0, 4) == "0977" ||
     substr($Number, 0, 4) == "0935" ||
     substr($Number, 0, 4) == "0936" ||
     substr($Number, 0, 4) == "0937" ||
+    substr($Number, 0, 4) == "0975" ||
+    substr($Number, 0, 4) == "0977" ||
+    substr($Number, 0, 4) == "0994" ||
     substr($Number, 0, 4) == "0996" ||
     substr($Number, 0, 4) == "0997" ||
+    substr($Number, 0, 6) == "+63817" ||
     substr($Number, 0, 6) == "+63905" ||
     substr($Number, 0, 6) == "+63906" ||
     substr($Number, 0, 6) == "+63915" ||
@@ -138,12 +142,19 @@ if( substr($Number, 0, 4) == "0977" ||
     substr($Number, 0, 6) == "+63935" ||
     substr($Number, 0, 6) == "+63936" ||
     substr($Number, 0, 6) == "+63937" ||
+    substr($Number, 0, 6) == "+63975" ||
+    substr($Number, 0, 6) == "+63977" ||
+    substr($Number, 0, 6) == "+63994" ||
     substr($Number, 0, 6) == "+63996" ||
     substr($Number, 0, 6) == "+63997"||
+    /* SMART */
+    substr($Number, 0, 4) == "0813" ||
+    substr($Number, 0, 4) == "0900" ||
     substr($Number, 0, 4) == "0907" ||
     substr($Number, 0, 4) == "0908" ||
     substr($Number, 0, 4) == "0909" ||
     substr($Number, 0, 4) == "0910" ||
+    substr($Number, 0, 4) == "0911" ||
     substr($Number, 0, 4) == "0912" ||
     substr($Number, 0, 4) == "0918" ||
     substr($Number, 0, 4) == "0919" ||
@@ -152,25 +163,26 @@ if( substr($Number, 0, 4) == "0977" ||
     substr($Number, 0, 4) == "0928" ||
     substr($Number, 0, 4) == "0929" ||
     substr($Number, 0, 4) == "0930" ||
+    substr($Number, 0, 4) == "0931" ||
     substr($Number, 0, 4) == "0938" ||
     substr($Number, 0, 4) == "0939" ||
-    substr($Number, 0, 4) == "0942" ||
-    substr($Number, 0, 4) == "0943" ||
+    substr($Number, 0, 4) == "0940" ||
     substr($Number, 0, 4) == "0946" ||
+    substr($Number, 0, 4) == "0947" ||
     substr($Number, 0, 4) == "0948" ||
-    substr($Number, 0, 4) == "0989" ||
-    substr($Number, 0, 4) == "0939" ||
-    substr($Number, 0, 4) == "0922" ||
-    substr($Number, 0, 4) == "0923" ||
-    substr($Number, 0, 4) == "0932" ||
-    substr($Number, 0, 4) == "0933" ||
+    substr($Number, 0, 4) == "0949" ||
+    substr($Number, 0, 4) == "0971" ||
+    substr($Number, 0, 4) == "0980" ||
     substr($Number, 0, 4) == "0989" ||
     substr($Number, 0, 4) == "0998" ||
     substr($Number, 0, 4) == "0999" ||
-    substr($Number, 0, 6) == "+63907" ||
-    substr($Number, 0, 6) == "+63908" ||
-    substr($Number, 0, 6) == "+63909" ||
-    substr($Number, 0, 6) == "+63910" ||
+    substr($Number, 0, 6) == "+63813" ||
+    substr($Number, 0, 6) == "+630900" ||
+    substr($Number, 0, 6) == "+630907" ||
+    substr($Number, 0, 6) == "+630908" ||
+    substr($Number, 0, 6) == "0909" ||
+    substr($Number, 0, 6) == "0910" ||
+    substr($Number, 0, 6) == "+63911" ||
     substr($Number, 0, 6) == "+63912" ||
     substr($Number, 0, 6) == "+63918" ||
     substr($Number, 0, 6) == "+63919" ||
@@ -179,18 +191,41 @@ if( substr($Number, 0, 4) == "0977" ||
     substr($Number, 0, 6) == "+63928" ||
     substr($Number, 0, 6) == "+63929" ||
     substr($Number, 0, 6) == "+63930" ||
+    substr($Number, 0, 6) == "+63931" ||
     substr($Number, 0, 6) == "+63938" ||
     substr($Number, 0, 6) == "+63939" ||
-    substr($Number, 0, 6) == "+63942" ||
-    substr($Number, 0, 6) == "+63943" ||
+    substr($Number, 0, 6) == "+63940" ||
     substr($Number, 0, 6) == "+63946" ||
+    substr($Number, 0, 6) == "+63947" ||
     substr($Number, 0, 6) == "+63948" ||
+    substr($Number, 0, 6) == "+63949" ||
+    substr($Number, 0, 6) == "+63971" ||
+    substr($Number, 0, 6) == "+63980" ||
     substr($Number, 0, 6) == "+63989" ||
-    substr($Number, 0, 6) == "+63939" ||
-    substr($Number, 0, 6) == "+63922" ||
-    substr($Number, 0, 6) == "+63923" ||
-    substr($Number, 0, 6) == "+63932" ||
-    substr($Number, 0, 6) == "+63933" ){
+    substr($Number, 0, 6) == "+63998" ||
+    substr($Number, 0, 6) == "+63999" ||
+
+
+    /* SUN */
+    substr($Number, 0, 4) == "0922" ||
+    substr($Number, 0, 4) == "0923" ||
+    substr($Number, 0, 4) == "0925" ||
+    substr($Number, 0, 4) == "0932" ||
+    substr($Number, 0, 4) == "0933" ||
+    substr($Number, 0, 4) == "0934" ||
+    substr($Number, 0, 4) == "0942" ||
+    substr($Number, 0, 4) == "0943" ||
+    substr($Number, 0, 4) == "0944" ||
+
+    substr($Number, 0, 4) == "+63922" ||
+    substr($Number, 0, 4) == "+63923" ||
+    substr($Number, 0, 4) == "+63925" ||
+    substr($Number, 0, 4) == "+63932" ||
+    substr($Number, 0, 4) == "+63933" ||
+    substr($Number, 0, 4) == "+63934" ||
+    substr($Number, 0, 4) == "+63942" ||
+    substr($Number, 0, 4) == "+63943" ||
+    substr($Number, 0, 4) == "+63944" ||){
 
     $query = mysql_query("select * from phonebook where Number = '$Number'");
 

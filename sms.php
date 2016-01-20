@@ -19,7 +19,7 @@ require 'header.php';
     .dropdown select {
     }
     .dropdown input {
-        //width: calc(100% - 20px);
+        /* width: calc(100% - 20px); */
         padding: 0 2.5em 0 3em;
         width: 100%;
         color: black;

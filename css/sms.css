@@ -260,4 +260,8 @@ table#rwd tbody td:before {
   -webkit-border-bottom-left-radius:15px;
   border-bottom-left-radius:15px;
 }
-
+.modal-header{
+    background: lightseagreen;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
