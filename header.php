@@ -21,6 +21,8 @@ require_once 'PHPMailerAutoload.php';
 $sel_id = '';
 $sel_Name = '';
 $sel_Number = '';
+
+$port = '';
 $u = CONF_DB_USER;
 $p = CONF_DB_PASS;
 $h = CONF_WEBHOST;
@@ -145,14 +147,12 @@ try {
             $body = $_POST['Message'] ."\n\n -GSHPCI ". $_POST['From_Name'];
         }
 
-
         if( substr($_POST['Subject'], 0, 4) == "0817" ||
             substr($_POST['Subject'], 0, 4) == "0905" ||
             substr($_POST['Subject'], 0, 4) == "0906" ||
             substr($_POST['Subject'], 0, 4) == "0915" ||
             substr($_POST['Subject'], 0, 4) == "0916" ||
             substr($_POST['Subject'], 0, 4) == "0917" ||
-            substr($_POST['Subject'], 0, 4) == "0925" ||
             substr($_POST['Subject'], 0, 4) == "0926" ||
             substr($_POST['Subject'], 0, 4) == "0927" ||
             substr($_POST['Subject'], 0, 4) == "0935" ||
@@ -164,7 +164,27 @@ try {
             substr($_POST['Subject'], 0, 4) == "0996" ||
             substr($_POST['Subject'], 0, 4) == "0997" ){
 
-            $mail->Subject = '500:eimr-port:11-'.$_POST['Subject'] ;
+            if($_POST['From_Name'] == 'Admin'){
+                if($_POST['port'] == "auto"){
+                    $mail->Subject = '500:eimr-port:11-'.$_POST['Subject'] ;
+                    $port = 'PORT:11(GLOBE)';
+                }else{
+                    $mail->Subject = '500:eimr-'.$_POST['port'].'-'.$_POST['Subject'] ;
+                    if($_POST['port'] == "port:11"){
+                        $port = $_POST['port'].'(GLOBE)';
+                    }else if($_POST['port'] == "port:13"){
+                        $port = $_POST['port'].'(SUN)';
+                    }else if($_POST['port'] == "port:15"){
+                        $port = $_POST['port'].'(SMART)';
+                    }else{
+                        $mail->Subject = '500:eimr-port:11-'.$_POST['Subject'] ;
+                        $port = 'PORT:11(GLOBE)';
+                    }
+                }
+            }else{
+                    $mail->Subject = '500:eimr-port:11-'.$_POST['Subject'] ;
+                    $port = 'PORT:11(GLOBE)';
+            }
 
         }else if(substr($_POST['Subject'], 0, 6) == "+63817" ||
             substr($_POST['Subject'], 0, 6) == "+63905" ||
@@ -172,7 +192,6 @@ try {
             substr($_POST['Subject'], 0, 6) == "+63915" ||
             substr($_POST['Subject'], 0, 6) == "+63916" ||
             substr($_POST['Subject'], 0, 6) == "+63917" ||
-            substr($_POST['Subject'], 0, 6) == "+63925" ||
             substr($_POST['Subject'], 0, 6) == "+63926" ||
             substr($_POST['Subject'], 0, 6) == "+63927" ||
             substr($_POST['Subject'], 0, 6) == "+63935" ||
@@ -184,7 +203,27 @@ try {
             substr($_POST['Subject'], 0, 6) == "+63996" ||
             substr($_POST['Subject'], 0, 6) == "+63997" ){
 
-            $mail->Subject = '500:eimr-port:11-09'.substr($_POST['Subject'], 4, 12);
+            if($_POST['From_Name'] == 'Admin'){
+                if($_POST['port'] == "auto"){
+                    $mail->Subject = '500:eimr-port:11-09'.substr($_POST['Subject'], 4, 12);
+                    $port = 'PORT:11(GLOBE)';
+                }else{
+                    $mail->Subject = '500:eimr-'.$_POST['port'].'-'.$_POST['Subject'] ;
+                    if($_POST['port'] == "port:11"){
+                        $port = $_POST['port'].'(GLOBE)';
+                    }else if($_POST['port'] == "port:13"){
+                        $port = $_POST['port'].'(SUN)';
+                    }else if($_POST['port'] == "port:15"){
+                        $port = $_POST['port'].'(SMART)';
+                    }else{
+                        $mail->Subject = '500:eimr-port:11-09'.substr($_POST['Subject'], 4, 12);
+                        $port = 'PORT:11(GLOBE)';
+                    }
+                }
+            }else{
+                    $mail->Subject = '500:eimr-port:11-09'.substr($_POST['Subject'], 4, 12);
+                    $port = 'PORT:11(GLOBE)';
+            }
 
         }else if(/* SMART */
             substr($_POST['Subject'], 0, 4) == "0813" ||
@@ -226,7 +265,27 @@ try {
             substr($_POST['Subject'], 0, 4) == "0943" ||
             substr($_POST['Subject'], 0, 4) == "0944" ){
 
-            $mail->Subject = '500:eimr-port:13-'.$_POST['Subject'] ;
+            if($_POST['From_Name'] == 'Admin'){
+                if($_POST['port'] == "auto"){
+                    $mail->Subject = '500:eimr-port:13-'.$_POST['Subject'] ;
+                    $port = 'PORT:13(SUN)';
+                }else{
+                    $mail->Subject = '500:eimr-'.$_POST['port'].'-'.$_POST['Subject'] ;
+                    if($_POST['port'] == "port:11"){
+                        $port = $_POST['port'].'(GLOBE)';
+                    }else if($_POST['port'] == "port:13"){
+                        $port = $_POST['port'].'(SUN)';
+                    }else if($_POST['port'] == "port:15"){
+                        $port = $_POST['port'].'(SMART)';
+                    }else{
+                        $mail->Subject = '500:eimr-port:13-'.$_POST['Subject'] ;
+                        $port = 'PORT:13(SUN)';
+                    }
+                }
+            }else{
+                    $mail->Subject = '500:eimr-port:13-'.$_POST['Subject'] ;
+                    $port = 'PORT:13(SUN)';
+            }
 
         }else if(/* SMART */
             substr($_POST['Subject'], 0, 6) == "+63813" ||
@@ -267,11 +326,32 @@ try {
             substr($_POST['Subject'], 0, 6) == "+63943" ||
             substr($_POST['Subject'], 0, 6) == "+63944" ){
 
-            $mail->Subject = '500:eimr-port:13-09'.substr($_POST['Subject'], 4, 12);
+            if($_POST['From_Name'] == 'Admin'){
+                if($_POST['port'] == "auto"){
+                    $mail->Subject = '500:eimr-port:13-09'.substr($_POST['Subject'], 4, 12);
+                    $port = 'PORT:13(SUN)';
+                }else{
+                    $mail->Subject = '500:eimr-'.$_POST['port'].'-'.$_POST['Subject'] ;
+                    if($_POST['port'] == "port:11"){
+                        $port = $_POST['port'].'(GLOBE)';
+                    }else if($_POST['port'] == "port:13"){
+                        $port = $_POST['port'].'(SUN)';
+                    }else if($_POST['port'] == "port:15"){
+                        $port = $_POST['port'].'(SMART)';
+                    }else{
+                        $mail->Subject = '500:eimr-port:13-09'.substr($_POST['Subject'], 4, 12);
+                        $port = 'PORT:13(SUN)';
+                    }
+                }
+            }else{
+                    $mail->Subject = '500:eimr-port:13-09'.substr($_POST['Subject'], 4, 12);
+                    $port = 'PORT:13(SUN)';
+            }
 
         }else{
 
             $mail->Subject = '500:eimr-port:11-09368807044' ;
+            $port = 'PORT:11(GLOBE)';
             $body = $_POST['Message'] ."\n\n -GSHPCI ". $_POST['From_Name']."\n\n Error: Sending to this # ".$_POST['Subject'];
             $smsremarks = '<span class="glyphicon glyphicon-remove">&nbsp;<strong>'."Error: Sending to this # ".$_POST['Subject'].'</strong></span>';
 
@@ -304,7 +384,7 @@ try {
             $subject = '';
             $message = '';
 
-            $sql = "INSERT INTO sms (datetime, mobile_no, station, message, remarks) VALUES(concat(curdate(),' ',curtime()),'". $_POST['Subject'] ."','". $_POST['From_Name'] ."',\"". $_POST['Message'] ."\",'". $smsremarks ."')";
+            $sql = "INSERT INTO sms (datetime, mobile_no, port, station, message, remarks) VALUES(concat(curdate(),' ',curtime()),'". $_POST['Subject'] ."','".$port."','". $_POST['From_Name'] ."',\"". $_POST['Message'] ."\",'". $smsremarks ."')";
             //echo $sql;
 
             $retval = mysql_query( $sql, $conn );

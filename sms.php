@@ -69,7 +69,26 @@ require 'header.php';
                             <input type="text" class="form-control" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>" style="width:120%;height:2em">
                     </div>
                     <div class="form-group has-primary">
-                        <label class="control-label" for="Message">Mobile :</label>
+
+                    <?php
+                        if ($from_name == 'Admin') {
+                    ?>
+
+                            <label class="control-label" for="Port">Port :</label>
+                            <div class="dropdown">
+                                <select size="1" name="port" id="port"  class="form-control" style="width: 45%;">
+                                    <option value='auto'>Auto</option>
+                                    <option value='port:11'>GLOBE</option>
+                                    <option value='port:13'>SUN</option>
+                                    <option value='port:15'>SMART</option>
+                                 </select>
+                            </div>
+                            <br>
+                    <?php
+                        }
+                    ?>
+
+                        <label class="control-label" for="Subject">Mobile :</label>
                         <div class="input-group">
                             <span class="input-group-addon" row="8">#</span>
                 <!--
@@ -102,10 +121,12 @@ $query = mysql_query("select id, concat(Lastname,', ',Firstname) as name, Number
                 </div>
                 <div class="form-group has-primary">
                     <label class="control-label" for="Message">Message :</label>
-                        <textarea type="text" class="form-control" id="Message" name="Message" value="<?php echo $message; ?>" style="height:30em" required></textarea>
+                    <textarea type="text" class="form-control" id="Message" name="Message" maxlength="480" value="<?php echo $message; ?>" style="height:28em; margin-bottom:10px;" required></textarea>
+                    <div id="Message_feedback" style="color:white; font-size:16px;"></div>
                 </div>
                 <button type="submit" value="submit" name="submit" class="colrite btn btn-success pull-right"><strong>Send</strong></button>
                 <div style="margin:1em 0; display:none;">Test will include two attachments.</div></h5>
+                <div id="Message_feedback" style="color:white; font-size:16px;"></div>
             </fieldset>
         </div>
     </div>
@@ -400,6 +421,20 @@ $query = mysql_query("select id, concat(Lastname,', ',Firstname) as name, Number
         }
     }
     </script>
+
+<script>
+$(document).ready(function() {
+    var text_max = 480;
+    $('#Message_feedback').html(text_max + ' characters remaining');
+
+    $('#Message').keyup(function() {
+        var text_length = $('#Message').val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#Message_feedback').html(text_remaining + ' characters remaining');
+    });
+});
+</script>
             </div>
         </div>
 <!--Modal for Add Contact-->

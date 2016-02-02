@@ -43,10 +43,10 @@ $dbhandle = mysql_connect($h, $u, $p) or die("Unable to connect to MySQL");
 $selected = mysql_select_db($dbase,$dbhandle) or die("Could not select examples");
 
 if ($from_name == 'Admin') {
-    $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s order by datetime desc  limit 50";
+    $sql = "SELECT message, id, datetime, mobile_no, station, remarks, port FROM sms s order by datetime desc  limit 50";
 } else {
     //$sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s where station = '{$from_name}' order by datetime desc limit 15" ;
-    $sql = "SELECT message, id, datetime, mobile_no, station, remarks FROM sms s where station = '{$from_name}' order by datetime desc limit 50" ;
+    $sql = "SELECT message, id, datetime, mobile_no, station, remarks, port FROM sms s where station = '{$from_name}' order by datetime desc limit 50" ;
 }
 
 $result = mysql_query($sql);
@@ -57,6 +57,11 @@ $result = mysql_query($sql);
         <th class="listtd" style="text-align: center" width="5%">Station</th>
         <th class="listtd" style="text-align: center" width="12%">Datetime</th>
         <th class="listtd" style="text-align: center" width="24%">Recipient</th>
+        <?php
+          if ($from_name == 'Admin') {
+              echo "<th class='listtd' style='text-align: center' width='5%'>Port</th>";
+          }
+        ?>
         <th class="listtd" style="text-align: center" width="36%">Message</th>
         <th class="listtd" style="text-align: center" width="25%">Status</th>
       </tr>
@@ -82,24 +87,30 @@ $result = mysql_query($sql);
                     $to = "UNKNOWN <".$mobile.">";
                   }
 
-            echo "<td class = 'listtd1' style='width: 25%;'>".$to."</td>
-                  <td class = 'listtd1' style='width: 36%;'>";
-        ?>
+            echo "<td class = 'listtd1' style='width: 25%;'>".$to."</td>";
+
+                  if ($from_name == 'Admin') {
+                    echo "<td class = 'listtd1' style='width: 5%;'>".$row{'port'}."</td>";
+                  }
+?>
+                  <td class = 'listtd1' style='width: 36%;'>
                       <div style="width: 100%; float:right;" >
-                <?php
+                      <?php
+                      $smsid = $row{'id'};
                       $sms = $row{'message'};
                       if (strlen($sms) > 50) {
                         echo substr($sms, 0, 50)."<span style='font-size:14 px; color:red;'> ... (trunc). </span>";
-                ?>
+                      ?>
                         <button style="text-decoration:none;cursor:pointer;" class = "btn btn-info" data-toggle="modal" data-target="#ViewSMS-<?php echo $row['id']; ?>">
                           <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style = "color:#fff;"></span>
                           View
                         </button >
 
-                <?php } else {
+                      <?php
+                      } else {
                         echo substr($sms, 0, 50);
                       }
-                ?>
+                      ?>
                       </div>
                   </td>
                   <td class = "listtd1"><?php echo $row{'remarks'} ?> &nbsp;&nbsp;
@@ -168,7 +179,24 @@ $result = mysql_query($sql);
                             <input type="hidden" class="form-control" id="cc_Email" name="cc_Email" value="<?php echo $cc_email; ?>" style="width:120%;height:2em">
                             <input type="hidden" class="form-control" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>" style="width:120%;height:2em">
 
-                            <label class="control-label" for="Message">Mobile :</label>
+                            <?php
+                            if ($from_name == 'Admin') {
+                            ?>
+                              <label class="control-label" for="port">Port :</label>
+                              <div class="dropdown">
+                                  <select size="1" name="port" id="port" class="form-control" style="width: 45%;">
+                                      <option value='auto'>Auto</option>
+                                      <option value='port:11'>GLOBE</option>
+                                      <option value='port:13'>SUN</option>
+                                      <option value='port:15'>SMART</option>
+                                   </select>
+                              </div>
+                              <br>
+                            <?php
+                            }
+                            ?>
+
+                            <label class="control-label" for="Subject">Mobile :</label>
                             <div class="dropdown">
                               <input pattern="^09[0-9]{9}" title="11 digits and numbers only. Must start with 09" style="font-size: 14px;" maxlength="11" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="text" id="Subject" name="Subject" placeholder='ENTER 09xxxxxxxxx or SELECT below' required />
                               <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()" size="1" class="form-control">
@@ -191,9 +219,10 @@ $result = mysql_query($sql);
                               </select>
                             </div>
 
-                            <br><br>
+                            <br>
                             <label class="control-label" for="Message">Message :</label>
-                            <textarea type="text" class="form-control" id="Message" name="Message" value="<?php echo $message; ?>" style="height:30em" required><?php echo $sms; ?></textarea>
+                            <textarea type="text" class="form-control" id="Message1-<?php echo $smsid; ?>" name="Message" maxlength="480" value="<?php echo $sms; ?>" style="height:30em" required><?php echo $sms; ?></textarea>
+                            <div id="Message_feedback1-<?php echo $smsid; ?>" style="color:green; font-size:16px;"></div>
 
                             <div class="modal-footer">
                               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -205,6 +234,24 @@ $result = mysql_query($sql);
             </div>
         </div>
         <!-- End Forward Modal -->
+
+<script>
+$(document).ready(function() {
+    var text_max = 480;
+    $('#Message_feedback1-'+<?php  echo $smsid; ?>).html(text_max + ' characters remaining');
+
+    $('#Message1-'+<?php  echo $smsid; ?>).keyup(function() {
+        var text_length = $('#Message1-'+<?php  echo $smsid; ?>).val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#Message_feedback1-'+<?php  echo $smsid; ?>).html(text_remaining + ' characters remaining');
+    });
+        var text_length1 = $('#Message1-'+<?php  echo $smsid; ?>).val().length;
+        var text_remaining1 = text_max - text_length1;
+
+        $('#Message_feedback1-'+<?php  echo $smsid; ?>).html(text_remaining1 + ' characters remaining');
+});
+</script>
 
 <?php
     }

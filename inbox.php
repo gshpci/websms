@@ -19,10 +19,10 @@ require_once 'config.inc.php';
   color: green;
   }
   .dropdown input {
-  /*width: calc(100% - 20px);*/
-  padding: 0 2.5em 0 2.5em;
-  width: 100%;
-  color: black;
+    /*width: calc(100% - 20px);*/
+    padding: 0 2.5em 0 2.5em;
+    width: 100%;
+    color: black;
   }
 </style>
 
@@ -289,24 +289,19 @@ foreach ($emails as $em) {
     <div class="modal-dialog">
         <div class="modal-content">
 
-                <div class="modal-header">
-                        <span id="IL_AD4" class="IL_AD">
-                    <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">
+            <div class="modal-header">
+                <span id="IL_AD4" class="IL_AD">
+                    <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></a>
+                </span>
 
-                        </span>
-                    </a>
-                    </span>
-
-                        <h4 class="modal-title" id="myModalLabel-<?php echo $uid; ?>">
-                            <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
-                            <span class="glyphicon glyphicon-share-alt" aria-hidden="true" style = "color:#fff;"></span>
-                            Reply SMS
-                        </h4>
-                </div>
+                <h4 class="modal-title" id="myModalLabel-<?php echo $uid; ?>">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
+                    <span class="glyphicon glyphicon-share-alt" aria-hidden="true" style = "color:#fff;"></span>
+                    Reply SMS
+                </h4>
+            </div>
 
             <div class="modal-body" >
-
 
             <form action = "sendfunction.php" method="POST" >
 
@@ -317,16 +312,31 @@ foreach ($emails as $em) {
                     <input type="hidden" class="form-control" id="cc_Email" name="cc_Email" value="<?php echo $cc_email; ?>" style="width:120%;height:2em">
                     <input type="hidden" class="form-control" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>" style="width:120%;height:2em">
 
-                    <label class="control-label" for="Message">Mobile :</label>
-
+                    <?php
+                        if ($from_name == 'Admin') {
+                    ?>
+                        <label class="control-label" for="port">Port :</label>
+                        <div class="dropdown">
+                            <select size="1" name="port" id="port" class="form-control" style="width: 45%;">
+                                <option value='auto'>Auto</option>
+                                <option value='port:11'>GLOBE</option>
+                                <option value='port:13'>SUN</option>
+                                <option value='port:15'>SMART</option>
+                             </select>
+                        </div>
+                        <br>
+                    <?php
+                        }
+                    ?>
+                    <label class="control-label" for="Subject">Mobile :</label>
                     <select size="1" class="form-control" id="Subject" name="Subject">
                         <option value="0<?php echo $mob_no; ?>"><?php echo $subject; ?></option>
                     </select>
 
-                    <br><br>
+                    <br>
                     <label class="control-label" for="Message">Message :</label>
-                    <textarea type="text" class="form-control" id="Message" name="Message" value="<?php echo $message; ?>" style="height:30em" required></textarea>
-
+                    <textarea type="text" class="form-control" id="Message-<?php echo $uid; ?>" name="Message" maxlength="480" value="<?php echo $message; ?>" style="height:30em" required></textarea>
+                    <div id="Message_feedback-<?php echo $uid; ?>" style="color:green; font-size:16px;"></div>
 
                 <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -341,26 +351,36 @@ foreach ($emails as $em) {
 </div>
 <!-- End Reply Modal -->
 
+<script>
+$(document).ready(function() {
+    var text_max = 480;
+    $('#Message_feedback-'+<?php  echo $uid; ?>).html(text_max + ' characters remaining');
+
+    $('#Message-'+<?php  echo $uid; ?>).keyup(function() {
+        var text_length = $('#Message-'+<?php  echo $uid; ?>).val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#Message_feedback-'+<?php  echo $uid; ?>).html(text_remaining + ' characters remaining');
+    });
+});
+</script>
+
 <!-- Forward Modal -->
 <div class="modal fade" id="ForwardSMS-<?php echo $uid; ?>" tabindex="-<?php echo $uid; ?>" role="dialog" aria-labelledby="myModalLabel-<?php echo $uid; ?>" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
-                <div class="modal-header">
-                        <span id="IL_AD4" class="IL_AD">
-                    <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">
+            <div class="modal-header">
+                <span id="IL_AD4" class="IL_AD">
+                    <a type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></a>
+                </span>
 
-                        </span>
-                    </a>
-                    </span>
-
-                        <h4 class="modal-title" id="myModalLabel-<?php echo $uid; ?>">
-                            <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
-                            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style = "color:#fff;"></span>
-                            Forward SMS
-                        </h4>
-                </div>
+                <h4 class="modal-title" id="myModalLabel-<?php echo $uid; ?>">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true" style = "color:#fff;"></span>
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style = "color:#fff;"></span>
+                    Forward SMS
+                </h4>
+            </div>
 
             <div class="modal-body" >
 
@@ -374,7 +394,23 @@ foreach ($emails as $em) {
                     <input type="hidden" class="form-control" id="cc_Email" name="cc_Email" value="<?php echo $cc_email; ?>" style="width:120%;height:2em">
                     <input type="hidden" class="form-control" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>" style="width:120%;height:2em">
 
-                    <label class="control-label" for="Message">Mobile :</label>
+                    <?php
+                        if ($from_name == 'Admin') {
+                    ?>
+                        <label class="control-label" for="port">Port :</label>
+                        <div class="dropdown">
+                            <select size="1" name="port" id="port" class="form-control" style="width: 45%;">
+                                <option value='auto'>Auto</option>
+                                <option value='port:11'>GLOBE</option>
+                                <option value='port:13'>SUN</option>
+                                <option value='port:15'>SMART</option>
+                            </select>
+                        </div>
+                        <br>
+                    <?php
+                        }
+                    ?>
+                    <label class="control-label" for="Subject">Mobile :</label>
                     <div class="dropdown">
                             <input pattern="^09[0-9]{9}" title="11 digits and numbers only. Must start with 09" style="font-size: 14px;" maxlength="11" onkeypress="return /\d/.test(String.fromCharCode(((event||window.event).which||(event||window.event).which)));" type="text" id="Subject" name="Subject" placeholder='ENTER 09xxxxxxxxx or SELECT below' required />
                                 <select onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()" size="1" class="form-control">
@@ -397,14 +433,13 @@ foreach ($emails as $em) {
                                 </select>
                     </div>
 
-                    <br><br>
+                    <br>
                     <label class="control-label" for="Message">Message :</label>
-                    <textarea type="text" class="form-control" id="Message" name="Message" value="<?php echo $message; ?>" style="height:30em" required><?php echo $sms; ?></textarea>
-
+                    <textarea type="text" class="form-control" id="Message1-<?php echo $uid; ?>" name="Message" maxlength="480" value="<?php echo $message; ?>" style="height:30em" required><?php echo $sms; ?></textarea>
+                    <div id="Message_feedback1-<?php echo $uid; ?>" style="color:green; font-size:16px;"></div>
 
                 <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <input type="submit" value="Send" name="submit" class="colrite btn btn-success pull-right">
                 </div>
             </form>
@@ -414,7 +449,24 @@ foreach ($emails as $em) {
     </div>
 </div>
 <!-- End Forward Modal -->
+<script>
+$(document).ready(function() {
+    var text_max = 480;
+    $('#Message_feedback1-'+<?php  echo $uid; ?>).html(text_max + ' characters remaining');
 
+    $('#Message1-'+<?php  echo $uid; ?>).keyup(function() {
+        var text_length = $('#Message1-'+<?php  echo $uid; ?>).val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#Message_feedback1-'+<?php  echo $uid; ?>).html(text_remaining + ' characters remaining');
+    });
+
+        var text_length1 = $('#Message1-'+<?php  echo $uid; ?>).val().length;
+        var text_remaining1 = text_max - text_length1;
+
+        $('#Message_feedback1-'+<?php  echo $uid; ?>).html(text_remaining1 + ' characters remaining');
+});
+</script>
 
 <?php
 }
@@ -427,3 +479,6 @@ foreach ($emails as $em) {
     </div>
 </div>
 
+</body>
+
+</html>
